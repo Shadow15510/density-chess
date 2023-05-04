@@ -11,6 +11,38 @@ Description
 Density Chess analyzes a chessboard and shows the density repartition on it.
 It also could play a game and show the evolution of the density in an animation.
 
+About *.chess files
+-------------------
+*.chess files allow to save a chessboard, load one and make moves.
+
+A chess file of a chess board is always formated as follows:
+ – the first char is the color of the piece ('w' or 'b'');
+ – the two seconds are the piece itself ('Qu', 'Ki', 'Ro', 'Bi', 'Kn', 'Pa');
+ – if the square of the chessboard is empty the code is '...'.
+
+e.g.: an exemple of a new game chess file
+```
+bRo bKn bBi bQu bKi bBi bKn bRo
+bPa bPa bPa bPa bPa bPa bPa bPa
+... ... ... ... ... ... ... ...
+... ... ... ... ... ... ... ...
+... ... ... ... ... ... ... ...
+... ... ... ... ... ... ... ...
+wPa wPa wPa wPa wPa wPa wPa wPa
+wRo wKn wBi wQu wKi wBi wKn wRo
+```
+
+A chess file of moves is just composed of the moves in algebric code with one move per line.
+e.g.:
+```
+e2-e4
+g8-f6
+f1-b5
+b8-c6
+g1-f3
+e7-e5
+```
+
 Exemple of usage
 ----------------
 Assuming Density Chess was imported as follows:
@@ -24,11 +56,13 @@ To start a new game :
 
 To see the chessboard
 
->>> chess.get_fig()
+>>> chess.get_fig() # it should return an empty list
 
 To make an animation with some moves
 
->>> chess.get_animation("moves", chess_game", interval=500)
+>>> chess.get_animation("moves", "chess_game", interval=500)
+
+Where "moves" is the file which contains the moves, and "chess_game" the GIF's name.
 
 You can also save and load games:
 
@@ -40,20 +74,6 @@ import numpy as np
 
 from matplotlib import animation
 from matplotlib.patches import Rectangle
-
-
-# ┌───────────┐ #
-# │ Constants │ #
-# └───────────┘ #
-QUEEN_VALUE = 2
-KING_VALUE = 1
-ROOK_VALUE = 5
-BISHOP_VALUE = 3
-KNIGHT_VALUE = 3
-PAWN_VALUE = 9
-
-PIECES_SYMBOLS = ("..", "qu", "ki", "ro", "bi", "kn", "pa")
-PIECES_COLORS = (".", "w", "b")
 
 
 # ┌─────────┐ #
@@ -514,14 +534,33 @@ def get_color(value: int, max_value: int):
     return (1, 2 - color, 2 - color)
 
 def move_file(filename: str, *moves):
-    """Create a *.chess file with the move.
+    """Create a *.chess file with the moves given.
 
     Parameters
     ----------
     filename : str
         Name of the output file (without extension).
     moves : tuple
-        Move in algebric code
+        Moves in algebric code
+
+    Exemple
+    -------
+    To make a file with somes moves:
+    >>> move_file("moves", "e2-e4", "e7-e5")
     """
     with open(f"{filename}.chess", "w", encoding="utf-8") as chess_file:
         chess_file.write("\n".join(moves))
+
+
+# ┌──────┐ #
+# │ Data │ #
+# └──────┘ #
+QUEEN_VALUE = 2
+KING_VALUE = 1
+ROOK_VALUE = 5
+BISHOP_VALUE = 3
+KNIGHT_VALUE = 3
+PAWN_VALUE = 9
+
+PIECES_SYMBOLS = ("..", "qu", "ki", "ro", "bi", "kn", "pa")
+PIECES_COLORS = (".", "w", "b")
