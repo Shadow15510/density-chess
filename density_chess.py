@@ -98,11 +98,13 @@ class ChessboardDensity:
     save_game
         Save the current game to a *.chess file.
     get_fig
-        Show the chess table with the density.
+        Show the chessboard with the density.
     get_animation
         Show the evolution of the density during a game.
     move
         Make a move with algebric code.
+    add_piece
+        Add a chess piece to the current chessboard.
     """
     def __init__(self):
         """Initialize the instances."""
@@ -293,15 +295,30 @@ class ChessboardDensity:
         ----------
         filename : str
             The name of the file (without extension) to be read.
+
+        Raises
+        ------
+        ChessFileError
+            If the file isn't valid or if the chess pieces aren't well encoded.
         """
         with open(f"{filename}.chess", "r", encoding="utf-8") as chess_file:
             lines = [line.rstrip() for line in chess_file.readlines()]
 
+        if len(lines) != 8 or False in [len(line.split()) == 8 for line in lines]:
+            raise ChessFileError("the given file isn't valid (wrong number of columns or lines)")
+
         lines.reverse()
         for line, line_content in enumerate(lines):
             for column, piece in enumerate(line_content.split(" ")):
-                isblack = PIECES_COLORS.index(piece[0].lower())
-                piece_id = PIECES_SYMBOLS.index(piece[1: ].lower())
+                isblack, piece_id = piece[0].lower(), piece[1: ].lower()
+
+                if isblack not in PIECES_COLORS:
+                    raise ChessFileError(f"unknown piece color: '{isblack}'")
+                isblack = PIECES_COLORS.index(isblack)
+
+                if piece_id not in PIECES_SYMBOLS:
+                    raise ChessFileError(f"unknown piece symbol: '{piece_id}'")
+                piece_id = PIECES_SYMBOLS.index(piece_id)
 
                 self.add_piece(column, line, piece_id - 1, isblack - 1)
 
@@ -431,6 +448,20 @@ class ChessboardDensity:
         algebric_move : str
             The algebric code for the move.
 
+        Raises
+        ------
+        ChessMoveError
+            If the move given isn't valid. A valid move should be as: `X1-Y2`.
+            Where X and Y are the columns, 1 and 2 are the lines.
+            e.g: valid moves
+            e2-e4
+            e7 e5
+
+            invalid moves
+            e2e4
+            e4
+            Ce4
+
         Exemple
         -------
         Assuming `chess` is a ChessboardDensity instance:
@@ -480,6 +511,10 @@ class ChessboardDensity:
             If ``isblack=True`` the added piece is black.
         """
         self.pieces_table[pos_y, pos_x] = (piece, isblack)
+
+
+class ChessFileError(Exception):
+    """Error in *.chess file."""
 
 
 class ChessMoveError(Exception):
