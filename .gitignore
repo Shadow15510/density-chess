@@ -1,0 +1,3 @@
+*.chess
+*.gif
+__pycache__/
