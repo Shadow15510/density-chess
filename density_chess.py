@@ -416,8 +416,9 @@ class ChessboardDensity:
             The name of the file wich contains algebric codes for moves.
         output_filename : str
             The name of the GIF file.
-        interval : int
+        interval : int, optionnal
             Time between two frames of the animation in ms.
+            By default ``interval=500`` i.e. 2 frames per second
     
         Exemples
         --------
@@ -469,7 +470,6 @@ class ChessboardDensity:
         >>> chess.new_game() # start a new game
         >>> chess.move("e2-e4") # move the pawn on e4 to e5
         """
-
         columns = ("a", "b", "c", "d", "e", "f", "g", "h")
         algebric_move = algebric_move.lower()
 
