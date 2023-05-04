@@ -546,14 +546,14 @@ def check_case(pos_x: int, pos_y: int):
     return False
 
 
-def get_color(value: int, max_value: int):
+def get_color(value: float, max_value: float):
     """Compute the color of the value with the maximum density value.
 
     Parameters
     ----------
-    value : int
+    value : float
         Density of the looked case.
-    max_value : int
+    max_value : float
         Maximum density value of the chessboard.
 
     Returns
