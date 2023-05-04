@@ -541,7 +541,6 @@ def check_case(pos_x: int, pos_y: int):
     out : bool
         Returns `True` if the case is in the chess table, `False` else.
     """
-
     if (0 <= pos_x < 8) and (0 <= pos_y < 8):
         return True
     return False
@@ -567,6 +566,7 @@ def get_color(value: int, max_value: int):
     if value <= max_value:
         return (color, color, 1)
     return (1, 2 - color, 2 - color)
+
 
 def move_file(filename: str, *moves):
     """Create a *.chess file with the moves given.
